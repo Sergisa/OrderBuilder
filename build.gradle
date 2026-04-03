@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+
+group = 'sergisa.orderbuilder'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("org.apache.poi:poi-ooxml:5.5.1")
+    implementation("org.apache.poi:poi:3.9")
+    implementation('com.formdev:flatlaf-extras:2.3')
+    implementation('com.intellij:forms_rt:7.0.3')
+    implementation('com.formdev:flatlaf:3.1.1')
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
+}
