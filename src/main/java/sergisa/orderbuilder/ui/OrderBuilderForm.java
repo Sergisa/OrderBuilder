@@ -24,6 +24,7 @@ public class OrderBuilderForm extends JFrame {
     private JPanel root;
     private JEditorPane orderEditorView;
     private JButton documentEditButton;
+    private JButton printerRepositoryEditButton;
     PrinterRepository printerRepository;
     JMenu mainMenu;
     JMenuBar menuBar;
@@ -60,6 +61,9 @@ public class OrderBuilderForm extends JFrame {
         documentEditButton.addActionListener(e -> {
             openDocumentRequisitesEditForm();
         });
+        printerRepositoryEditButton.addActionListener(e -> {
+            openEditRepositoryForm(printerRepository);
+        });
     }
 
     private void createMenu() {
@@ -82,7 +86,7 @@ public class OrderBuilderForm extends JFrame {
     }
 
     private void openDocumentRequisitesEditForm() {
-        RequisitesEditForm requisitesEditForm =new RequisitesEditForm();
+        RequisitesEditForm requisitesEditForm = new RequisitesEditForm();
         requisitesEditForm.setLocationRelativeTo(this);
     }
 
@@ -154,6 +158,10 @@ public class OrderBuilderForm extends JFrame {
         documentEditButton.setForeground(new Color(-16756777));
         documentEditButton.setText("Редактировать шаблон документа");
         toolBar1.add(documentEditButton);
+        printerRepositoryEditButton = new JButton();
+        printerRepositoryEditButton.setForeground(new Color(-16756777));
+        printerRepositoryEditButton.setText("Принтеры");
+        toolBar1.add(printerRepositoryEditButton);
     }
 
     /**

@@ -72,6 +72,13 @@
               <text value="Редактировать шаблон документа"/>
             </properties>
           </component>
+          <component id="68d00" class="javax.swing.JButton" binding="printerRepositoryEditButton">
+            <constraints/>
+            <properties>
+              <foreground color="-16756777"/>
+              <text value="Принтеры"/>
+            </properties>
+          </component>
         </children>
       </toolbar>
     </children>

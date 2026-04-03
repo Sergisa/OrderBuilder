@@ -18,9 +18,9 @@ public class PrinterListViewItemRenderer extends JPanel implements ListCellRende
 
     public PrinterListViewItemRenderer() {
         setLayout(new GridBagLayout());
-        ((GridBagLayout) getLayout()).columnWidths = new int[]{21, 0, 0, 0};
+        ((GridBagLayout) getLayout()).columnWidths = new int[]{25 + 5, 0, 0, 0};
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        checkIcon.setIcon(new FlatSVGIcon(getClass().getResource("check-square-svgrepo-com.svg")));
+        checkIcon.setIcon(new FlatSVGIcon(getClass().getResource("greenCheckmark.svg")));
         invLabel.setBorder(new RoundedBorder(Color.BLUE, 5));
 
         add(modelLabel, new GridBagConstraints(1, 0, 2, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));

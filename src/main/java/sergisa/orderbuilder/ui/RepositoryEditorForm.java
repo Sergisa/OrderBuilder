@@ -1,5 +1,6 @@
 package sergisa.orderbuilder.ui;
 
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -31,7 +32,7 @@ public class RepositoryEditorForm extends JFrame {
     public RepositoryEditorForm(PrinterRepository printerRepository) {
         this.printerRepository = printerRepository;
         setContentPane(root);
-
+        addItemButton.setIcon(new FlatSVGIcon(getClass().getResource("add/add.svg")));
         DefaultListModel<Printer> printerListModel = new DefaultListModel<>();
         printerListView.setModel(printerListModel);
         printerListView.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -144,7 +145,7 @@ public class RepositoryEditorForm extends JFrame {
         printerListView.setVisibleRowCount(8);
         scrollPane1.setViewportView(printerListView);
         addItemButton = new JButton();
-        addItemButton.setText("addPrinter");
+        addItemButton.setText("");
         panel2.add(addItemButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label4 = new JLabel();
         Font label4Font = this.$$$getFont$$$("Nunito ExtraBold", -1, 16, label4.getFont());
