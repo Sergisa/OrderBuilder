@@ -14,6 +14,7 @@ public class PrinterListViewItemRenderer extends JPanel implements ListCellRende
     JLabel cartridgeLabel = new JLabel();
     JLabel checkIcon = new JLabel();
     private boolean isCartridgeVisible = false;
+    private boolean isIconCheckable = true;
 
     public PrinterListViewItemRenderer() {
         setLayout(new GridBagLayout());
@@ -40,14 +41,24 @@ public class PrinterListViewItemRenderer extends JPanel implements ListCellRende
         cartridgeLabel.setText(printer.getCartridge().getModelName());
 
         cartridgeLabel.setVisible(isCartridgeVisible);
-        checkIcon.setVisible(isSelected);
+        if (isIconCheckable) {
+            checkIcon.setVisible(isSelected);
+            setBackground(Color.WHITE);
+        } else {
+            checkIcon.setVisible(false);
+            setBackground(isSelected ? Color.LIGHT_GRAY : Color.WHITE);
+        }
 
-        setBackground(Color.WHITE);
+        //
         return this;
     }
 
     public void setCartridgeVisible() {
         isCartridgeVisible = true;
         repaint();
+    }
+
+    public void setIconNotCheckable() {
+        isIconCheckable = false;
     }
 }

@@ -13,6 +13,8 @@ import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Locale;
 
@@ -21,15 +23,16 @@ public class OrderBuilderForm extends JFrame {
     private JButton refreshButton;
     private JPanel root;
     private JEditorPane orderEditorView;
-    private JButton repositoryEditButton;
-    private JTextField significantFIOTextField;
-    private JTextField significantPostTextField;
+    private JButton documentEditButton;
     PrinterRepository printerRepository;
+    JMenu mainMenu;
+    JMenuBar menuBar;
 
     public OrderBuilderForm(PrinterRepository printerRepository) {
         setTitle("Order Builder");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 400);
+        //createMenu();
         try {
             File fontFile = new File(getClass().getResource("Raleway-Light.ttf").getFile());
             Font customFont = Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(12f);
@@ -49,14 +52,38 @@ public class OrderBuilderForm extends JFrame {
 
         printerRepository.getPrinters().forEach(printerListModel::addElement);
         printerListView.setCellRenderer(new PrinterListViewItemRenderer());
-        repositoryEditButton.addActionListener(e -> {
-            openEditRepositoryForm(printerRepository);
-        });
         refreshButton.addActionListener(e -> {
             OrderList orderList = buildOrder();
             File file = new File("src/orderTemplate.docx");
             TableWriter writer = new TableWriter(file, orderList);
         });
+        documentEditButton.addActionListener(e -> {
+            openDocumentRequisitesEditForm();
+        });
+    }
+
+    private void createMenu() {
+        menuBar = new JMenuBar();
+        mainMenu = new JMenu("Управление");
+        mainMenu.add(createMenuItem("Редактировать принтеры", "E", new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openEditRepositoryForm(printerRepository);
+            }
+        }));
+        mainMenu.add(createMenuItem("Настроить реквизиты документа", new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openDocumentRequisitesEditForm();
+            }
+        }));
+        menuBar.add(mainMenu);
+        setJMenuBar(menuBar);
+    }
+
+    private void openDocumentRequisitesEditForm() {
+        RequisitesEditForm requisitesEditForm =new RequisitesEditForm();
+        requisitesEditForm.setLocationRelativeTo(this);
     }
 
     public OrderList buildOrder() {
@@ -71,6 +98,19 @@ public class OrderBuilderForm extends JFrame {
     private void openEditRepositoryForm(PrinterRepository printerRepository) {
         RepositoryEditorForm repositoryEditorForm = new RepositoryEditorForm(printerRepository);
         repositoryEditorForm.setLocation(getX() + getWidth(), getY());
+    }
+
+    private JMenuItem createMenuItem(String name, ActionListener listener) {
+        return createMenuItem(name, null, listener);
+    }
+
+    private JMenuItem createMenuItem(String name, String shortcut, ActionListener listener) {
+        //mainMenu.setMnemonic(shortcut.charAt(0));
+        JMenuItem item = new JMenuItem(name);
+        //item.setMnemonic(shortcut.charAt(0)); // русская буква
+        if (shortcut != null) item.setAccelerator(KeyStroke.getKeyStroke(shortcut.charAt(0)));
+        item.addActionListener(listener);
+        return item;
     }
 
     {
@@ -89,9 +129,9 @@ public class OrderBuilderForm extends JFrame {
      */
     private void $$$setupUI$$$() {
         root = new JPanel();
-        root.setLayout(new GridLayoutManager(5, 3, new Insets(10, 10, 10, 10), -1, -1));
+        root.setLayout(new GridLayoutManager(4, 2, new Insets(10, 10, 10, 10), -1, -1));
         final JSplitPane splitPane1 = new JSplitPane();
-        root.add(splitPane1, new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
+        root.add(splitPane1, new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
         final JScrollPane scrollPane1 = new JScrollPane();
         splitPane1.setLeftComponent(scrollPane1);
         printerListView = new JList();
@@ -102,28 +142,18 @@ public class OrderBuilderForm extends JFrame {
         Font refreshButtonFont = this.$$$getFont$$$("Raleway Light", -1, -1, refreshButton.getFont());
         if (refreshButtonFont != null) refreshButton.setFont(refreshButtonFont);
         refreshButton.setText("Сформировать");
-        root.add(refreshButton, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
-        repositoryEditButton = new JButton();
-        Font repositoryEditButtonFont = this.$$$getFont$$$("Raleway Light", -1, -1, repositoryEditButton.getFont());
-        if (repositoryEditButtonFont != null) repositoryEditButton.setFont(repositoryEditButtonFont);
-        repositoryEditButton.setText("Редактировать репозиторий");
-        root.add(repositoryEditButton, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        root.add(refreshButton, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
         final JLabel label1 = new JLabel();
-        label1.setText("Визирующее лицо");
-        root.add(label1, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label2 = new JLabel();
-        label2.setText("Должность визирующего");
-        root.add(label2, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        significantPostTextField = new JTextField();
-        significantPostTextField.setText("Декан факультета «Информационные технологии»");
-        root.add(significantPostTextField, new GridConstraints(4, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        significantFIOTextField = new JTextField();
-        significantFIOTextField.setHorizontalAlignment(2);
-        significantFIOTextField.setText("Л.С. Куравский");
-        root.add(significantFIOTextField, new GridConstraints(3, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        final JLabel label3 = new JLabel();
-        label3.setText("Label");
-        root.add(label3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        Font label1Font = this.$$$getFont$$$("Nunito ExtraBold", -1, 16, label1.getFont());
+        if (label1Font != null) label1.setFont(label1Font);
+        label1.setText("Формирование заявки");
+        root.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JToolBar toolBar1 = new JToolBar();
+        root.add(toolBar1, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(-1, 20), null, 0, false));
+        documentEditButton = new JButton();
+        documentEditButton.setForeground(new Color(-16756777));
+        documentEditButton.setText("Редактировать шаблон документа");
+        toolBar1.add(documentEditButton);
     }
 
     /**
@@ -154,4 +184,5 @@ public class OrderBuilderForm extends JFrame {
     public JComponent $$$getRootComponent$$$() {
         return root;
     }
+
 }
